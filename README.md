@@ -101,10 +101,17 @@ STEP 5  정의      판정 기준 중심의 진짜 문제 + Invariant + 사고 �
 ```text
 MagicSquare_XX/
 ├── README.md                          ← 이 파일 (프로젝트 개요)
+├── .cursor/
+│   └── magicsquare-rules.yaml         ← 규칙 템플릿 뼈대 (키만, 값 비움)
 ├── Report/
-│   └── 01.MagicSquare_ProblemDefinition_Report.md   ← STEP 1~5 전체 보고서
+│   ├── 01.MagicSquare_ProblemDefinition_Report.md   ← STEP 1~5 전체 보고서
+│   ├── 02.MagicSquare_TDD_Design_Report.md          ← TDD 설계 (spec 산출물)
+│   ├── 03.MagicSquare_PRD_Report.md                 ← PRD (구현 전 제품 요구사항)
+│   ├── 04.MagicSquare_CursorRules_Report.md         ← Cursor 규칙 설계 보고서
+│   └── 05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md
 └── Prompting/
-    └── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트 기록
+    ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
+    └── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
 ```
 
 ---
@@ -114,7 +121,13 @@ MagicSquare_XX/
 | 문서 | 설명 |
 |------|------|
 | [Report/01.MagicSquare_ProblemDefinition_Report.md](Report/01.MagicSquare_ProblemDefinition_Report.md) | 관찰, Why 분석, 진짜 문제 정의, Invariant, 종합 요약 (상세) |
-| [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | Cursor에서 진행한 문제 정의 단계 프롬프트·응답 기록 |
+| [Report/02.MagicSquare_TDD_Design_Report.md](Report/02.MagicSquare_TDD_Design_Report.md) | TDD 설계: 계약, Slice, TC-001~018, red/green/refactor Playbook |
+| [Report/03.MagicSquare_PRD_Report.md](Report/03.MagicSquare_PRD_Report.md) | PRD: Vision, Scope, Contracts, Stories, AC, Architecture, Verification |
+| [Report/04.MagicSquare_CursorRules_Report.md](Report/04.MagicSquare_CursorRules_Report.md) | Cursor 프로젝트 룰 설계·정리 보고서 |
+| [Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md](Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md) | User Journey, Stories, Scenarios, Verification |
+| [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
+| [Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md](Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md) | 브랜치·spec·TDD 설계 실행 프롬프트·응답 transcript |
+| `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
 
@@ -123,8 +136,10 @@ MagicSquare_XX/
 | 항목 | 상태 |
 |------|------|
 | 문제 정의 (STEP 1~5) | ✅ 완료 |
-| 보고서 | ✅ `Report/` |
-| 구현·테스트·실행 방법 | ⏳ 미착수 |
+| TDD 설계 문서 (`spec`) | ✅ `Report/02...` |
+| PRD (`spec`) | ✅ `Report/03...` |
+| 보고서·Prompting transcript | ✅ `Report/`, `Prompting/` |
+| 구현·테스트·실행 방법 | ⏳ 미착수 (`red` 이후) |
 
 ---
 
