@@ -134,7 +134,8 @@ MagicSquare_XX/
 │   ├── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
 │   ├── 14.MagicSquare_GREEN_GUI_Demo_Report.md ← GREEN GUI 데모 (Answer/Verify)
 │   ├── 15.MagicSquare_Golden_Master_Report.md ← Golden Master 회귀 (GM-1~3)
-│   └── 16.MagicSquare_REFACTOR_Plan_Report.md ← REFACTOR 계획 (S0 · AC-FR)
+│   ├── 16.MagicSquare_REFACTOR_Plan_Report.md ← REFACTOR 계획 (S0 · AC-FR)
+│   └── 17.MagicSquare_REFACTOR_Execution_Report.md ← REFACTOR 실행 (WP×7 commits)
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
@@ -146,7 +147,8 @@ MagicSquare_XX/
     ├── 09.cursor_red_green_todo_export_transcript.md ← RED/GREEN To-Do·Report/12 Export
     ├── 10.cursor_green_gui_demo_transcript.md ← GREEN GUI·Report/14 Export
     ├── 11.cursor_golden_master_transcript.md ← Golden Master·Report/15 Export
-    └── 12.cursor_refactor_plan_export_transcript.md ← REFACTOR 계획·Report/16 Export
+    ├── 12.cursor_refactor_plan_export_transcript.md ← REFACTOR 계획·Report/16 Export
+    └── 13.cursor_refactor_execution_export_transcript.md ← REFACTOR 실행·Report/17 Export
 ```
 
 ---
@@ -171,6 +173,7 @@ MagicSquare_XX/
 | [Report/14.MagicSquare_GREEN_GUI_Demo_Report.md](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) | GREEN GUI 데모 (4×4 Answer/Verify, `scripts/`) |
 | [Report/15.MagicSquare_Golden_Master_Report.md](Report/15.MagicSquare_Golden_Master_Report.md) | Golden Master 회귀 (GM-1~3, approve, GM-TC-01~05) |
 | [Report/16.MagicSquare_REFACTOR_Plan_Report.md](Report/16.MagicSquare_REFACTOR_Plan_Report.md) | REFACTOR 계획 SSOT (S0 · AC-FR-01-01, P0~P3, Phase A~C) |
+| [Report/17.MagicSquare_REFACTOR_Execution_Report.md](Report/17.MagicSquare_REFACTOR_Execution_Report.md) | REFACTOR 실행 (WP×7 `refactor:` 커밋, pytest 13/35 passed) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
@@ -183,6 +186,7 @@ MagicSquare_XX/
 | [Prompting/10.cursor_green_gui_demo_transcript.md](Prompting/10.cursor_green_gui_demo_transcript.md) | GREEN GUI·Report/14 Export transcript |
 | [Prompting/11.cursor_golden_master_transcript.md](Prompting/11.cursor_golden_master_transcript.md) | Golden Master·Report/15 Export transcript |
 | [Prompting/12.cursor_refactor_plan_export_transcript.md](Prompting/12.cursor_refactor_plan_export_transcript.md) | 코드 리뷰·REFACTOR 계획·Report/16 Export transcript |
+| [Prompting/13.cursor_refactor_execution_export_transcript.md](Prompting/13.cursor_refactor_execution_export_transcript.md) | REFACTOR 실행·7커밋·Report/17 Export transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
@@ -198,7 +202,7 @@ MagicSquare_XX/
 | 구현·테스트·실행 방법 | ✅ AC-FR-01-01 GREEN 12/12 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), GUI [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md), GM [Report/15](Report/15.MagicSquare_Golden_Master_Report.md) |
 | RED 보고서·Transcript | ✅ `Report/06~10`, `Prompting/05~07` |
 | GREEN 보고서·Transcript | ✅ `Report/11~15`, `Prompting/08~11` |
-| REFACTOR 계획·Transcript | ✅ [Report/16](Report/16.MagicSquare_REFACTOR_Plan_Report.md), [Prompting/12](Prompting/12.cursor_refactor_plan_export_transcript.md) (실행·`refactor:` 커밋 ⏳) |
+| REFACTOR 계획·실행 | ✅ [Report/16](Report/16.MagicSquare_REFACTOR_Plan_Report.md), [Report/17](Report/17.MagicSquare_REFACTOR_Execution_Report.md), [Prompting/12~13](Prompting/12.cursor_refactor_plan_export_transcript.md) · `refactor/refactor` 7 commits |
 
 ---
 
