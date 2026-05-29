@@ -128,7 +128,8 @@ MagicSquare_XX/
 │   ├── 09.MagicSquare_DualTrack_RED_TestPlan_Design_Report.md ← Dual-Track TestPlan SSOT
 │   ├── 10.MagicSquare_RED_DualTrack_Skeleton_Report.md ← RED Skeleton (24건)
 │   ├── 11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md ← GREEN 1슬라이스 (grid=None)
-│   └── 12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md ← RED/GREEN To-Do SSOT
+│   ├── 12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md ← RED/GREEN To-Do SSOT
+│   └── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
@@ -158,6 +159,7 @@ MagicSquare_XX/
 | [Report/10.MagicSquare_RED_DualTrack_Skeleton_Report.md](Report/10.MagicSquare_RED_DualTrack_Skeleton_Report.md) | RED Skeleton 실행 (24 pytest) |
 | [Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md) | GREEN 1슬라이스 (`stabilize/green`, grid=None 6 passed) |
 | [Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md](Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md) | RED/GREEN To-Do 체크리스트 SSOT |
+| [Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md) | GREEN `feat:` 커밋별 6항목 산출물 (G-01~G-04) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
@@ -384,9 +386,22 @@ Skeleton은 “자리만 잡은 RED”다. **green 전에** 각 항목을 Full R
 ### 공통
 
 - [x] `develop` pull 후 `stabilize/green` 브랜치 생성
-- [ ] `stabilize/green` → `develop` merge (AC-FR-01-01 12건 전부 green 후)
+- [ ] `stabilize/green` → `develop` merge (AC-FR-01-01 12 passed — merge 대기)
 - [ ] [defect_list.md](defect_list.md) DEF-001~002 종결 (validate 구현 완료 시)
 - [ ] 커버리지 실행·HTML 확인 ([§4](#4-테스트--커버리지-출력-필수-관행))
+
+---
+
+### GREEN 커밋별 필수 산출물 (6항목)
+
+각 `feat:` 커밋마다 [Report/13](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md) 형식으로 기록한다.
+
+1. RED / GREEN 상태 (1줄)
+2. 선택 RED (Test ID + node id)
+3. 수정한 프로덕션 파일 + 채운 분기 (2~3문장)
+4. pytest 결과 (PASS/FAIL)
+5. GUI 수동 결과 (해당 시 1~2줄, 아니면 N/A)
+6. Conventional Commit 메시지 제안
 
 ---
 
@@ -404,28 +419,28 @@ Skeleton은 “자리만 잡은 RED”다. **green 전에** 각 항목을 Full R
 - [x] `test_none_grid_returns_invalid_size_and_message`
 - [x] `test_none_grid_returns_validation_failure_model_type`
 
-**검증:** `pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -k none_grid -v` → 6 passed
+**검증:** `pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -k none_grid -v` → 6 passed · 산출물: [Report/13 § G-01](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md#g-01--6fc9679)
 
-#### G-02 · `[]` 빈 리스트 — `feat: empty grid [] returns INVALID_SIZE`
+#### G-02 · `[]` — `feat: empty grid [] returns INVALID_SIZE` ✅ (`523e795`)
 
-- [ ] `test_boundary_shape_returns_invalid_size_failure[empty_list]`
-- [ ] `test_empty_list_returns_invalid_size_code`
+- [x] `test_boundary_shape_returns_invalid_size_failure[empty_list]`
+- [x] `test_empty_list_returns_invalid_size_code`
 
-**검증:** `-k "none_grid or empty_list"` → 8 passed
+**검증:** `-k "none_grid or empty_list"` → 8 passed · 산출물: [Report/13 § G-02](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md#g-02--523e795)
 
-#### G-03 · shape ≠ 4×4 — `feat: non-4x4 shape returns INVALID_SIZE`
+#### G-03 · shape ≠ 4×4 — `feat: non-4x4 shape returns INVALID_SIZE` ✅ (`44cc78a`)
 
-- [ ] `test_boundary_shape_returns_invalid_size_failure[four_empty_rows]`
-- [ ] `test_boundary_shape_returns_invalid_size_failure[three_by_four]`
-- [ ] `test_three_by_four_returns_invalid_size_code`
+- [x] `test_boundary_shape_returns_invalid_size_failure[four_empty_rows]`
+- [x] `test_boundary_shape_returns_invalid_size_failure[three_by_four]`
+- [x] `test_three_by_four_returns_invalid_size_code`
 
-**검증:** size 관련 5건 + none 6건 → 11 passed
+**검증:** 11 passed · 산출물: [Report/13 § G-03](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md#g-03--44cc78a)
 
-#### G-04 · scope 통합 — `feat: scope guard INVALID_SIZE for dimension inputs`
+#### G-04 · scope — `feat: scope guard INVALID_SIZE for dimension inputs` ✅ (`67eb1cf`)
 
-- [ ] `test_scope_only_invalid_size_not_other_ac_codes`
+- [x] `test_scope_only_invalid_size_not_other_ac_codes`
 
-**DoD:** `pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -v` → **12 passed**
+**DoD:** 전체 12 passed · 산출물: [Report/13 § G-04](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md#g-04--67eb1cf)
 
 ---
 
@@ -461,7 +476,7 @@ Skeleton RED만 있음 → **Full RED 전환 후** 아래 green 착수.
 
 | 스위트 | passed | failed | 비고 |
 |--------|--------|--------|------|
-| AC-FR-01-01 (12) | 6 | 6 | G-01 완료, G-02~04 대기 |
+| AC-FR-01-01 (12) | 12 | 0 | G-01~G-04 완료 |
 | Dual-Track Skeleton (24) | 0 | 24 | green 대상 아님 |
 
 ---
