@@ -101,6 +101,19 @@ STEP 5  정의      판정 기준 중심의 진짜 문제 + Invariant + 사고 �
 ```text
 MagicSquare_XX/
 ├── README.md                          ← 이 파일 (프로젝트 개요)
+├── .venv/                             ← 로컬 가상환경 (git 제외, 테스트는 여기서 실행)
+├── requirements-dev.txt               ← pytest, pydantic, pytest-cov
+├── pytest.ini                         ← pythonpath=src
+├── .coveragerc                        ← 커버리지 측정 설정
+├── scripts/
+│   ├── setup-venv.ps1                 ← 가상환경 생성·의존성 설치
+│   ├── run-coverage.ps1               ← 테스트 + 커버리지 (터미널 + HTML)
+│   ├── open-coverage-html.ps1         ← htmlcov/index.html 브라우저에서 열기
+│   └── open-coverage-liveserver.ps1   ← Live Server로 htmlcov/ 서빙
+├── src/magicsquare/                   ← ECB 구현 (boundary / control / domain / entity)
+├── tests/                             ← pytest (unit / integration)
+├── docs/                              ← 테스트 플랜 등 (예: TP-ST01-TC011-001.md)
+├── defect_list.md                     ← RED 단계 결함 목록 (AC-FR-01-01)
 ├── .cursor/
 │   └── magicsquare-rules.yaml         ← 규칙 템플릿 뼈대 (키만, 값 비움)
 ├── Report/
@@ -108,10 +121,13 @@ MagicSquare_XX/
 │   ├── 02.MagicSquare_TDD_Design_Report.md          ← TDD 설계 (spec 산출물)
 │   ├── 03.MagicSquare_PRD_Report.md                 ← PRD (구현 전 제품 요구사항)
 │   ├── 04.MagicSquare_CursorRules_Report.md         ← Cursor 규칙 설계 보고서
-│   └── 05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md
+│   ├── 05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md
+│   └── 06.MagicSquare_RED_AC_FR_01_01_Report.md     ← RED 단계 (AC-FR-01-01) 실행 보고서
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
-    └── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
+    ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
+    ├── 04.cursor_magic_square_user_journey_user_story_scenario_transcript.md
+    └── 05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md ← RED·플랜·커버리지 대화
 ```
 
 ---
@@ -125,8 +141,12 @@ MagicSquare_XX/
 | [Report/03.MagicSquare_PRD_Report.md](Report/03.MagicSquare_PRD_Report.md) | PRD: Vision, Scope, Contracts, Stories, AC, Architecture, Verification |
 | [Report/04.MagicSquare_CursorRules_Report.md](Report/04.MagicSquare_CursorRules_Report.md) | Cursor 프로젝트 룰 설계·정리 보고서 |
 | [Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md](Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md) | User Journey, Stories, Scenarios, Verification |
+| [Report/06.MagicSquare_RED_AC_FR_01_01_Report.md](Report/06.MagicSquare_RED_AC_FR_01_01_Report.md) | RED 단계: 테스트 플랜·pytest·커버리지·결함 목록 |
+| [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
+| [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
 | [Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md](Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md) | 브랜치·spec·TDD 설계 실행 프롬프트·응답 transcript |
+| [Prompting/05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md](Prompting/05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md) | RED·테스트 플랜·venv·커버리지·결함 대화 transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
@@ -139,7 +159,131 @@ MagicSquare_XX/
 | TDD 설계 문서 (`spec`) | ✅ `Report/02...` |
 | PRD (`spec`) | ✅ `Report/03...` |
 | 보고서·Prompting transcript | ✅ `Report/`, `Prompting/` |
-| 구현·테스트·실행 방법 | ⏳ 미착수 (`red` 이후) |
+| 구현·테스트·실행 방법 | ⏳ RED 진행 — [Report/06](Report/06.MagicSquare_RED_AC_FR_01_01_Report.md), [테스트 실행](#테스트-실행-가상환경--커버리지) |
+| RED 보고서·Transcript | ✅ `Report/06...`, `Prompting/05...` |
+
+---
+
+## 테스트 실행 (가상환경 · 커버리지)
+
+**본 프로젝트의 pytest는 시스템 Python이 아니라 프로젝트 루트의 `.venv` 가상환경에서 실행합니다.**  
+커버리지 측정·리포트 출력도 동일하게 가상환경의 `pytest-cov`를 사용합니다.
+
+### 1. 최초 1회 — 가상환경 준비
+
+PowerShell(프로젝트 루트):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-venv.ps1
+```
+
+`requirements-dev.txt` 기준으로 `pytest`, `pydantic`, `pytest-cov`가 `.venv`에 설치됩니다.
+
+### 2. 가상환경 활성화 (권장)
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+프롬프트에 `(.venv)`가 보이면 활성화된 상태입니다.
+
+### 3. 테스트만 실행
+
+```powershell
+pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -v
+```
+
+활성화 없이 한 번에 실행할 때:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -v
+```
+
+> **RED 단계:** 구현 전이면 테스트가 **의도적으로 실패**할 수 있습니다(`NotImplementedError` 등). 수집·실행 자체가 되면 환경은 정상입니다.
+
+### 4. 테스트 + 커버리지 출력 (필수 관행)
+
+터미널 요약과 **HTML 리포트**를 함께 생성합니다. HTML은 반드시 `htmlcov/`에 기록됩니다.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run-coverage.ps1
+```
+
+또는 (가상환경 활성화 후):
+
+```powershell
+pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -v `
+  --cov=magicsquare.boundary --cov=magicsquare.control --cov=magicsquare.domain `
+  --cov-config=.coveragerc --cov-report=term-missing --cov-report=html:htmlcov
+```
+
+| 출력 | 설명 |
+|------|------|
+| 터미널 `term-missing` | 모듈별 Cover % 및 미커버 라인 |
+| **`htmlcov/index.html`** | **브라우저용 HTML 커버리지 리포트** (파일·라인 하이라이트) |
+
+커버리지 설정은 [`.coveragerc`](.coveragerc)를 따릅니다. `htmlcov/`·`.coverage`는 git에 포함하지 않습니다.
+
+### 5. HTML 커버리지 보기
+
+1. 위 [§4](#4-테스트--커버리지-출력-필수-관행)를 실행해 `htmlcov/index.html`을 생성합니다.
+2. 브라우저에서 엽니다.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\open-coverage-html.ps1
+```
+
+**Live Server로 보기** (파일 경로 대신 로컬 HTTP 서버 — 권장):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\open-coverage-liveserver.ps1
+```
+
+브라우저에서 `http://127.0.0.1:5500/index.html` 이 열립니다. 종료는 해당 터미널에서 `Ctrl+C`.
+
+`htmlcov`가 없으면 `open-coverage-html.ps1` / `open-coverage-liveserver.ps1`이 먼저 `run-coverage.ps1`을 실행합니다.
+
+수동으로 열 때: 프로젝트 루트의 **`htmlcov\index.html`** 을 더블클릭하거나, 탐색기 주소창에 전체 경로를 붙여 넣습니다.
+
+```text
+MagicSquare_XX/htmlcov/index.html   ← 파일별·라인별 커버리지 (녹색/빨강)
+```
+
+### 6. 주의
+
+- **시스템 `python` / 전역 `pytest`로 실행하지 마세요.** 패키지 버전·`src` 경로가 어긋날 수 있습니다.
+- 의존성을 바꾼 뒤에는 `.venv`에서 `pip install -r requirements-dev.txt`를 다시 실행하세요.
+
+---
+
+## RED 단계 To-Do 리스트
+
+> 이 체크리스트는 test_plan.md 기반으로 생성되었습니다.
+> 각 항목은 RED(실패 테스트 작성) 완료 시 체크합니다.
+
+### Track A — UI / Boundary 테스트
+- [ ] TC-A-01: grid=None 입력 → 실패 결과 반환 (Happy Path of Failure)
+- [ ] TC-A-02: code가 정확히 "INVALID_SIZE" 문자열인지 검증
+- [ ] TC-A-03: message가 "Grid must be 4x4." 와 문자 단위 동일한지 검증
+- [ ] TC-A-04: grid=None 시 Domain 진입점 0회 호출 (mock/spy 검증)
+- [ ] TC-A-05: grid=[] 빈 리스트 → 실패 결과 반환
+- [ ] TC-A-06: grid=3×4 크기 불일치 → 실패 결과 반환
+- [ ] TC-A-07: 반환 객체 타입이 지정 실패 결과 구조체인지 검증
+
+### Track B — Domain / Logic 테스트
+- [ ] TC-B-01: resolve()가 None grid를 직접 받지 않음을 격리 검증
+- [ ] TC-B-02: Boundary가 None 분기를 처리 후 resolve() 미호출 확인
+- [ ] TC-B-03: resolve() mock이 호출됐을 경우 테스트 실패 처리
+- [ ] TC-B-04: AC-FR-01-02~05 범위의 케이스는 이 커밋에 포함하지 않음 확인
+
+### 커버리지 목표
+- [ ] Domain Logic: 95%+ — [테스트 실행 §4](#4-테스트--커버리지-출력-필수-관행) (`scripts/run-coverage.ps1`)
+- [ ] Boundary Layer: 85%+
+- [ ] 전체 TOTAL: 90%+
+
+### 결함 목록 연결
+- [x] [defect_list.md](defect_list.md) 생성 및 발견 결함 기록 (DEF-001~005, RED 12 failed)
+- [ ] 모든 결함 수정 후 회귀 테스트 통과 확인
 
 ---
 

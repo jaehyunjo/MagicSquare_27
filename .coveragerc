@@ -1,0 +1,17 @@
+[run]
+source = magicsquare
+branch = True
+omit =
+    */tests/*
+    */__pycache__/*
+
+[report]
+show_missing = True
+skip_empty = True
+precision = 1
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+
+[html]
+directory = htmlcov
