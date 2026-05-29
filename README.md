@@ -122,12 +122,18 @@ MagicSquare_XX/
 │   ├── 03.MagicSquare_PRD_Report.md                 ← PRD (구현 전 제품 요구사항)
 │   ├── 04.MagicSquare_CursorRules_Report.md         ← Cursor 규칙 설계 보고서
 │   ├── 05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md
-│   └── 06.MagicSquare_RED_AC_FR_01_01_Report.md     ← RED 단계 (AC-FR-01-01) 실행 보고서
+│   ├── 06.MagicSquare_RED_AC_FR_01_01_Report.md     ← RED 단계 (AC-FR-01-01) 실행 보고서
+│   ├── 07.MagicSquare_RED_DualTrack_FR01_05_Report.md ← Dual-Track RED 설계 (FR-01~05)
+│   ├── 08.MagicSquare_RED_DualTrack_FullRED_UIN0103_Report.md ← Full RED (U-IN-01~03)
+│   ├── 09.MagicSquare_DualTrack_RED_TestPlan_Design_Report.md ← Dual-Track TestPlan SSOT
+│   └── 10.MagicSquare_RED_DualTrack_Skeleton_Report.md ← RED Skeleton (24건)
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
     ├── 04.cursor_magic_square_user_journey_user_story_scenario_transcript.md
-    └── 05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md ← RED·플랜·커버리지 대화
+    ├── 05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md ← RED·플랜·커버리지 대화
+    ├── 06.cursor_dual_track_red_fr01_05_transcript.md ← Dual-Track RED FR-01~05 대화
+    └── 07.cursor_dual_track_red_skeleton_transcript.md ← RED Skeleton·Export 대화
 ```
 
 ---
@@ -142,11 +148,17 @@ MagicSquare_XX/
 | [Report/04.MagicSquare_CursorRules_Report.md](Report/04.MagicSquare_CursorRules_Report.md) | Cursor 프로젝트 룰 설계·정리 보고서 |
 | [Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md](Report/05.MagicSquare_UserJourney_UserStories_Scenarios_Report.md) | User Journey, Stories, Scenarios, Verification |
 | [Report/06.MagicSquare_RED_AC_FR_01_01_Report.md](Report/06.MagicSquare_RED_AC_FR_01_01_Report.md) | RED 단계: 테스트 플랜·pytest·커버리지·결함 목록 |
+| [Report/07.MagicSquare_RED_DualTrack_FR01_05_Report.md](Report/07.MagicSquare_RED_DualTrack_FR01_05_Report.md) | Dual-Track RED 설계표 (FR-01~05, Track A/B 27건) |
+| [Report/08.MagicSquare_RED_DualTrack_FullRED_UIN0103_Report.md](Report/08.MagicSquare_RED_DualTrack_FullRED_UIN0103_Report.md) | Full RED (U-IN-01~03, 12 pytest) |
+| [Report/09.MagicSquare_DualTrack_RED_TestPlan_Design_Report.md](Report/09.MagicSquare_DualTrack_RED_TestPlan_Design_Report.md) | Dual-Track RED TestPlan SSOT |
+| [Report/10.MagicSquare_RED_DualTrack_Skeleton_Report.md](Report/10.MagicSquare_RED_DualTrack_Skeleton_Report.md) | RED Skeleton 실행 (24 pytest) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
 | [Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md](Prompting/02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md) | 브랜치·spec·TDD 설계 실행 프롬프트·응답 transcript |
 | [Prompting/05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md](Prompting/05.cursor_ac_fr_01_01_red_test_plan_coverage_transcript.md) | RED·테스트 플랜·venv·커버리지·결함 대화 transcript |
+| [Prompting/06.cursor_dual_track_red_fr01_05_transcript.md](Prompting/06.cursor_dual_track_red_fr01_05_transcript.md) | Dual-Track RED FR-01~05 설계·Export 대화 transcript |
+| [Prompting/07.cursor_dual_track_red_skeleton_transcript.md](Prompting/07.cursor_dual_track_red_skeleton_transcript.md) | RED Skeleton·Report Export 대화 transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
