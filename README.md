@@ -132,7 +132,8 @@ MagicSquare_XX/
 │   ├── 11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md ← GREEN 1슬라이스 (grid=None)
 │   ├── 12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md ← RED/GREEN To-Do SSOT
 │   ├── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
-│   └── 14.MagicSquare_GREEN_GUI_Demo_Report.md ← GREEN GUI 데모 (Answer/Verify)
+│   ├── 14.MagicSquare_GREEN_GUI_Demo_Report.md ← GREEN GUI 데모 (Answer/Verify)
+│   └── 15.MagicSquare_Golden_Master_Report.md ← Golden Master 회귀 (GM-1~3)
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
@@ -142,7 +143,8 @@ MagicSquare_XX/
     ├── 07.cursor_dual_track_red_skeleton_transcript.md ← RED Skeleton·Export 대화
     ├── 08.cursor_stabilize_green_ac_fr_01_01_transcript.md ← stabilize/green·Report/11 Export
     ├── 09.cursor_red_green_todo_export_transcript.md ← RED/GREEN To-Do·Report/12 Export
-    └── 10.cursor_green_gui_demo_transcript.md ← GREEN GUI·Report/14 Export
+    ├── 10.cursor_green_gui_demo_transcript.md ← GREEN GUI·Report/14 Export
+    └── 11.cursor_golden_master_transcript.md ← Golden Master·Report/15 Export
 ```
 
 ---
@@ -165,6 +167,7 @@ MagicSquare_XX/
 | [Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md](Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md) | RED/GREEN To-Do 체크리스트 SSOT |
 | [Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md) | GREEN `feat:` 커밋별 6항목 산출물 (G-01~G-04) |
 | [Report/14.MagicSquare_GREEN_GUI_Demo_Report.md](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) | GREEN GUI 데모 (4×4 Answer/Verify, `scripts/`) |
+| [Report/15.MagicSquare_Golden_Master_Report.md](Report/15.MagicSquare_Golden_Master_Report.md) | Golden Master 회귀 (GM-1~3, approve, GM-TC-01~05) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
@@ -175,6 +178,7 @@ MagicSquare_XX/
 | [Prompting/08.cursor_stabilize_green_ac_fr_01_01_transcript.md](Prompting/08.cursor_stabilize_green_ac_fr_01_01_transcript.md) | stabilize/green ECB GREEN·Report/11 Export transcript |
 | [Prompting/09.cursor_red_green_todo_export_transcript.md](Prompting/09.cursor_red_green_todo_export_transcript.md) | RED/GREEN To-Do·Report/12 Export transcript |
 | [Prompting/10.cursor_green_gui_demo_transcript.md](Prompting/10.cursor_green_gui_demo_transcript.md) | GREEN GUI·Report/14 Export transcript |
+| [Prompting/11.cursor_golden_master_transcript.md](Prompting/11.cursor_golden_master_transcript.md) | Golden Master·Report/15 Export transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
@@ -187,9 +191,9 @@ MagicSquare_XX/
 | TDD 설계 문서 (`spec`) | ✅ `Report/02...` |
 | PRD (`spec`) | ✅ `Report/03...` |
 | 보고서·Prompting transcript | ✅ `Report/`, `Prompting/` |
-| 구현·테스트·실행 방법 | ✅ AC-FR-01-01 GREEN 12/12 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), GUI [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) |
+| 구현·테스트·실행 방법 | ✅ AC-FR-01-01 GREEN 12/12 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), GUI [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md), GM [Report/15](Report/15.MagicSquare_Golden_Master_Report.md) |
 | RED 보고서·Transcript | ✅ `Report/06~10`, `Prompting/05~07` |
-| GREEN 보고서·Transcript | ✅ `Report/11~14`, `Prompting/08~10` |
+| GREEN 보고서·Transcript | ✅ `Report/11~15`, `Prompting/08~11` |
 
 ---
 
@@ -385,6 +389,42 @@ Skeleton은 “자리만 잡은 RED”다. **green 전에** 각 항목을 Full R
 - [ ] DEF-005: PRD `INPUT_DIMENSION_MISMATCH` vs 테스트 `INVALID_SIZE` 문서 합의
 
 > **참고:** ECB **green(구현)** 은 [GREEN To-Do](#green-단계-to-do-리스트) · [Report/12](Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md)를 따른다 ([Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md)).
+
+---
+
+## Golden Master 회귀 안전장치
+
+Refactoring 시작 전 구축. **GREEN 완료 후 즉시 적용.**
+
+| 산출물 | 경로 |
+|--------|------|
+| 기준 파일 | `tests/golden_master_expected.txt` |
+| 테스트 | `tests/test_golden_master_magic_square.py` |
+| 캡처·approve | `scripts/golden_master.py`, `scripts/generate_golden_master.py` |
+| 설계·실행 예시 | [docs/Golden_Master_Approve_Pattern.md](docs/Golden_Master_Approve_Pattern.md), [docs/GM-2_Golden_Master_Test_Execution_Example.md](docs/GM-2_Golden_Master_Test_Execution_Example.md), [Report/15](Report/15.MagicSquare_Golden_Master_Report.md) |
+
+```powershell
+pytest -m golden_master -v
+```
+
+### 기준 파일 생성
+
+- [x] **GM-01** — `golden_master_expected.txt` 생성
+- [x] **GM-02** — 정상/역순/오류 시나리오 추가 (GM-TC-01~05)
+- [x] **GM-03** — `git add tests/golden_master_expected.txt` (버전 관리 포함)
+
+### 테스트 코드
+
+- [x] **GM-04** — `test_golden_master_magic_square` 작성
+- [x] **GM-05** — approve 패턴 적용 (파일 없으면 생성 · 있으면 `read()` vs actual 비교)
+- [x] **GM-06** — Golden Master 테스트 PASS 확인 (`pytest -m golden_master`)
+
+### 회귀 보호
+
+- [x] **GM-07** — row-major 규칙 보호
+- [x] **GM-08** — 1-index 출력 보호
+- [x] **GM-09** — reverse 조합 fallback 보호
+- [x] **GM-10** — Error Contract 보호 (`INVALID_BLANK_COUNT`, `DUPLICATE_NUMBER`, `NO_VALID_MAGIC_SQUARE`)
 
 ---
 
