@@ -37,6 +37,11 @@ def validate_grid_input(grid: Any | None) -> ValidationFailure:
             code=_INVALID_SIZE_CODE,
             message=_INVALID_SIZE_MESSAGE,
         )
+    if isinstance(grid, list) and len(grid) == 0:
+        return ValidationFailure(
+            code=_INVALID_SIZE_CODE,
+            message=_INVALID_SIZE_MESSAGE,
+        )
     raise NotImplementedError(
-        "GREEN partial: only grid=None implemented (AC-FR-01-01)"
+        "GREEN partial: only grid=None and [] implemented (AC-FR-01-01)"
     )
