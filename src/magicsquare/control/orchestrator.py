@@ -25,8 +25,8 @@ def verify_magic_square(
     Raises:
         NotImplementedError: For inputs outside the current green slice.
     """
-    if grid is None:
+    if grid is None or isinstance(grid, list):
         return validate_grid_input(grid)
     raise NotImplementedError(
-        "GREEN partial: only grid=None implemented (AC-FR-01-01)"
+        "GREEN partial: only None and list grid inputs implemented (AC-FR-01-01)"
     )
