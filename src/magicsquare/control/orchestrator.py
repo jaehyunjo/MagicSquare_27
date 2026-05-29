@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-from magicsquare.boundary.validation import ValidationFailure
+from magicsquare.boundary.validation import ValidationFailure, validate_grid_input
 
 
 def verify_magic_square(
@@ -23,8 +23,10 @@ def verify_magic_square(
         ValidationFailure when input is rejected at boundary.
 
     Raises:
-        NotImplementedError: RED phase — no production logic yet.
+        NotImplementedError: For inputs outside the current green slice.
     """
+    if grid is None or isinstance(grid, list):
+        return validate_grid_input(grid)
     raise NotImplementedError(
-        "RED: verify_magic_square not implemented (AC-FR-01-01 / green phase)"
+        "GREEN partial: only None and list grid inputs implemented (AC-FR-01-01)"
     )

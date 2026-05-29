@@ -1,0 +1,49 @@
+[GM-TC-01]
+Input:
+16 3 0 13
+5 10 11 8
+9 6 0 12
+4 15 14 1
+
+Output:
+[1,3,2,3,3,7]
+
+[GM-TC-02]
+Input:
+16 2 3 13
+5 11 10 8
+9 7 0 12
+4 14 15 0
+
+Output:
+[3,3,6,4,4,1]
+
+[GM-TC-03]
+Input:
+16 3 2 13
+5 10 11 8
+9 6 7 12
+4 15 14 1
+
+Error:
+INVALID_BLANK_COUNT
+
+[GM-TC-04]
+Input:
+16 3 2 13
+5 0 11 5
+9 6 0 12
+4 15 14 1
+
+Error:
+DUPLICATE_NUMBER
+
+[GM-TC-05]
+Input:
+8 10 6 7
+15 11 13 0
+0 9 2 3
+14 16 5 12
+
+Error:
+NO_VALID_MAGIC_SQUARE
