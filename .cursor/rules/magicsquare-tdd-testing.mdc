@@ -1,0 +1,41 @@
+---
+description: Dual-Track TDD(red/green/refactor) 및 pytest 테스트 규칙
+alwaysApply: true
+---
+
+# TDD & Testing Rules
+
+## Workflow (Dual-Track TDD)
+
+Follow: develop → spec → red → green → refactor → develop
+
+- **spec**: design/contracts only (docs). No production code in `src/`.
+- **red**: write failing tests first; confirm failure with pytest.
+- **green**: minimal implementation to pass the new failing tests; no refactors.
+- **refactor**: restructure without changing observable behavior; all tests stay green.
+
+## Commit prefixes
+
+- spec: `docs:`
+- red: `test:`
+- green: `feat:`
+- refactor: `refactor:`
+
+## pytest conventions
+
+- Framework: pytest
+- Pattern: AAA (Arrange/Act/Assert)
+- Test naming: `test_<tc_id>_<intent>`
+  - Example: `test_tc001_durer_valid`
+
+## Alignment with spec
+
+- Keep tests aligned with `Report/02.MagicSquare_TDD_Design_Report.md`
+- TC range: TC-001 ~ TC-018
+
+## Hard prohibitions
+
+- No `@pytest.mark.skip`, `xfail`, or weakening assertions to “get green”.
+- Do not implement outside the current Slice order.
+- Primary scope is verification only; do not implement generation in early slices.
+

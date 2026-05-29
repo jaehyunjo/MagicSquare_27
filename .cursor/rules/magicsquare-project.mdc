@@ -1,0 +1,50 @@
+---
+description: MagicSquare_XX 프로젝트 핵심 컨텍스트(도메인/프로필/폴더구조)
+alwaysApply: true
+---
+
+# MagicSquare_XX Project Context
+
+## Domain profile (fixed)
+
+- Primary scope: **verification (판정) only**. Generation/UI are out of primary scope.
+- Profile id: `MS4X4_STD_V1`
+- Grid: 4×4, row-major 16-tuple canonical form
+- Magic lines: 10 (4 rows + 4 cols + 2 diagonals)
+- Magic constant: 34
+- Verdicts: `Valid`, `Invalid`, `InputError`
+
+## References first
+
+- If uncertain, align with:
+  - `README.md`
+  - `Report/01.MagicSquare_ProblemDefinition_Report.md`
+  - `Report/02.MagicSquare_TDD_Design_Report.md`
+
+## Architecture (ECB) overview
+
+- Boundary: parse/serialize; **no domain rules**
+- Control: orchestrate use-cases; **no raw I/O parsing**
+- Entity: domain rules/data; **no frameworks / pytest / I/O**
+
+Dependency direction:
+
+- Allowed: `boundary → control`, `control → entity`, (limited) `boundary → entity`
+- Forbidden: `entity → control`, `entity → boundary`, `control → boundary`
+
+## Suggested file structure
+
+Use this as the default layout:
+
+```
+src/magicsquare/
+  entity/
+  control/
+  boundary/
+tests/
+  unit/
+  integration/
+Report/
+Prompting/
+```
+

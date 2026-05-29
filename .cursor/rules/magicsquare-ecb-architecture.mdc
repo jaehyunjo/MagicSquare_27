@@ -1,0 +1,42 @@
+---
+description: ECB 아키텍처 경계/의존 방향 규칙
+alwaysApply: true
+---
+
+# ECB Architecture Rules
+
+## Boundary layer
+
+- Responsibilities:
+  - Parse external inputs into canonical grid (row-major 16 ints)
+  - Validate dimension/type/completeness and raise/return `InputError`
+  - Serialize `VerdictResult` to external DTO/JSON (optional)
+- Must not:
+  - Implement domain invariants (I-1~I-3)
+  - Implement generation algorithms
+
+## Control layer
+
+- Responsibilities:
+  - Fix and load profile `MS4X4_STD_V1` (do not allow ad-hoc variants)
+  - Enforce check order: input format → I-1 → I-2/I-3
+  - Assemble deterministic `VerdictResult`
+- Must not:
+  - Depend on boundary details (CLI/UI/HTTP specifics)
+  - Process raw external input without boundary adapter
+
+## Entity layer
+
+- Responsibilities:
+  - Domain data + invariants: Grid, Verdict, Violation, MagicLine, Profile
+  - I-1 multiset, I-2/I-3 line sums, constant=34
+- Must not:
+  - Import pytest, logging config, file I/O, frameworks
+  - Contain UI/CLI code
+
+## Dependency direction (enforce)
+
+- Allowed: `boundary → control`, `control → entity`
+- Allowed (limited): `boundary → entity` (DTO/enum sharing only)
+- Forbidden: `entity → control`, `entity → boundary`, `control → boundary`
+
