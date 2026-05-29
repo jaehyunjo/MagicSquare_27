@@ -1,5 +1,5 @@
-"""Domain layer: magic-square resolution (Entity rules entry)."""
+"""Compatibility package — prefer magicsquare.entity for domain rules."""
 
-from magicsquare.domain.resolver import resolve
+from magicsquare.entity.resolver import resolve
 
 __all__ = ["resolve"]
