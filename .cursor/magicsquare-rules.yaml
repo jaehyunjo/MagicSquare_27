@@ -1,0 +1,274 @@
+################################################################################
+project:
+  name: MagicSquare_XX
+  domain: 4x4_magic_square_verification
+  goal: >
+    4×4 격자에 대한 마방진 판정 기준을 고정하고,
+    임의의 완전 배치에 일관되게 적용·반복·기록한다.
+    1차 범위는 검증(판정)만; 생성·UI는 2차.
+  scope_primary:
+    verdicts: [Valid, Invalid, InputError]
+    profile_id: MS4X4_STD_V1
+    magic_lines: 10
+    magic_constant: 34
+  invariants_priority: "I-4 → I-1~I-3 → I-5, I-7 → I-6(2차) → I-8(2차)"
+  references:
+    - README.md
+    - Report/01.MagicSquare_ProblemDefinition_Report.md
+    - Report/02.MagicSquare_TDD_Design_Report.md
+  roles_separation:
+    - verification
+    - generation
+    - presentation
+
+################################################################################
+code_style:
+  python_version: "3.10+"
+  style_guide: PEP8 엄격 준수
+  type_hints: 모든 함수 파라미터와 반환값에 필수
+  docstring: Google 스타일, 모든 public 메서드에 필수
+  max_line_length: 88
+  formatter: Black
+  linter: ruff
+  imports:
+    - 표준 라이브러리 → 서드파티 → 로컬 (레이어 순)
+    - `from __future__ import annotations` 권장
+  naming:
+    module: snake_case
+    class: PascalCase
+    function: snake_case
+    constant: UPPER_SNAKE_CASE
+
+################################################################################
+architecture:
+  pattern: ECB
+  layers:
+    boundary:
+      role: 외부 입출력 담당 (UI, API, CLI, 파일, row-major 16튜플 파싱)
+      responsibilities:
+        - 외부 형식 → CanonicalGrid(16 int) 변환
+        - 차원·타입·완전성 검사 → InputError (I-7)
+        - VerdictResult를 외부 DTO/JSON으로 직렬화 (선택)
+      must_not:
+        - I-1~I-3 도메인 규칙 구현
+        - 마방진 생성 알고리즘
+    control:
+      role: 비즈니스 로직·유스케이스 오케스트레이션
+      responsibilities:
+        - Profile MS4X4_STD_V1 로드·고정 (I-4)
+        - 검사 순서: 입력 형식 → I-1 → I-2/I-3
+        - VerdictResult 조립, 결정성 보장 (I-5)
+      must_not:
+        - 파싱·CLI 세부에 entity가 의존
+        - boundary 없이 외부 raw 입력 직접 처리
+    entity:
+      role: 도메인 데이터 및 규칙
+      responsibilities:
+        - Grid, Verdict, Violation, MagicLine, Profile
+        - I-1 multiset, I-2/I-3 선 합, 마법 상수 34 (I-3)
+      must_not:
+        - pytest, logging 설정, 파일 I/O, 프레임워크 import
+        - UI·CLI 코드
+  dependency_direction:
+    allowed:
+      - boundary → control
+      - control → entity
+      - boundary → entity  # DTO/enum 공유만; entity는 boundary import 금지
+    forbidden:
+      - entity → control
+      - entity → boundary
+      - control → boundary  # 역방향 금지
+
+################################################################################
+tdd_rules:
+  workflow: develop → spec → red → green → refactor → develop
+  slice_order: [S0, S1, S2, S3, S4]
+  merge_policy:
+    develop: green 또는 refactor 완료 후만
+    red_only: develop merge 금지
+  commit_prefix:
+    spec: "docs:"
+    red: "test:"
+    green: "feat:"
+    refactor: "refactor:"
+  spec_phase:
+    branch: spec
+    description: >
+      TDD 설계·계약·TC 명세를 고정한다. 코드 없이 Report/02와 Slice·TC-ID를 동결한다.
+    rules:
+      - Report/02.MagicSquare_TDD_Design_Report.md와 TC-001~018 정합 유지
+      - 1차 범위(검증만), Profile 10선, 마법상수 34 문서화
+      - 커밋 접두사 docs: 사용
+      - 승인 후 red 브랜치 분기
+    must_not:
+      - src/ 프로덕션 구현·생성 알고리즘
+      - red/green/refactor용 실패 테스트를 spec에서 선행 작성 (red에서)
+    proceed_when:
+      - §1~§8·Decision Log·TC 목록 합의
+    next: red_phase
+  red_phase:
+    branch: red
+    description: >
+      실패하는 테스트를 먼저 작성하고 pytest로 실패를 확인한 뒤에만 green으로 진행한다.
+    rules:
+      - 현재 Slice(Report/02 §5) TC만 추가·수정
+      - TC-ID·Invariant(I-x)를 테스트명·docstring에 명시
+      - pytest 실행 후 해당 Slice TC가 실패함을 확인
+      - Report/02 Given/When/Then과 수치(row-major 16튜플) 일치
+      - 커밋 접두사 test: 사용
+      - 스텁은 있어도 되나, 실패를 유발하는 수준만 허용
+    must_not:
+      - RED 없이 src에 기능 구현·확장
+      - "@pytest.mark.skip", xfail, assertion 삭제로 실패 회피
+      - 의도와 다른 이유로 테스트 통과
+      - Slice 범위 밖 TC·2차(생성·I-8) 선행
+    proceed_when:
+      - 대상 Slice 신규·변경 TC가 모두 실패(또는 미구현으로 실패)
+      - 실패 원인이 미구현임이 명확
+    next: green_phase
+  green_phase:
+    branch: green
+    description: >
+      red에서 추가한 실패 TC를 통과시키는 최소 구현만 작성한다. 이 단계는 통과가 목표이지 구조 개선이 아니다.
+    rules:
+      - red_phase 실패 TC를 통과시키는 최소 코드만 작성
+      - 현재 Slice TC 100% 통과 후 커밋
+      - 커밋 접두사 feat: 사용
+      - entity → control → boundary 순으로 필요한 최소만 추가
+    must_not:
+      - 리팩터링(이름 변경, 파일 분리, 중복 제거, 추상화)
+      - Slice 밖 기능·2차(생성·I-8) 구현
+      - 테스트 완화·스킵·expect 낮추기
+      - Profile·10선·34 임의 변경
+    proceed_when:
+      - 현재 Slice TC 전부 통과(의도적 skip·pending 없음)
+      - 추가 코드가 테스트를 만족하는 최소 수준
+    next: refactor_phase
+  refactor_phase:
+    branch: refactor
+    description: >
+      관측 가능한 동작을 유지한 채 구조만 개선한다. 전체 pytest가 녹색이어야 한다.
+    rules:
+      - verdict·violations·profileId 관측 결과 동일 (I-5)
+      - 전체 pytest 스위트 통과 유지
+      - 커밋 접두사 refactor: 사용
+      - ECB 레이어 경계·의존 방향 정리
+      - 리팩터 전후 동일 TC 집합·assertion 수준 유지
+    must_not:
+      - 기능 추가·버그 수정·계약 변경(선행 spec/TC 문서 수정 없이)
+      - 테스트 삭제·완화로 녹색 유지
+      - 커버리지·TC 수 축소
+      - MS4X4_STD_V1·10선·마법상수 34 변경
+    proceed_when:
+      - 전체 pytest 통과
+      - diff가 구조·이름·중복 제거에 한정(행위 동일)
+    next: develop merge 또는 다음 Slice red_phase
+
+################################################################################
+testing:
+  framework: pytest
+  pattern: AAA
+  coverage_minimum: "80%"
+  coverage_note: >
+    도구(coverage.py) 기준 line coverage 80% 이상.
+    Report/02 TC-ID별 시나리오는 반드시 테스트로 존재해야 하며,
+    수치 커버리지만으로 TC 누락을 대체하지 않는다.
+  fixture_scope:
+    unit_entity: function
+    golden_grid: module
+    profile_ms4x4: session
+    rule: >
+      변경 가능한 격자 상태는 function scope.
+      GOLDEN_DURER_1514 등 불변 픽스처는 module 이상 공유.
+      Profile/선 레지스트리는 session.
+  naming_convention:
+    prefix: test_
+    pattern: "test_<tc_id>_<intent>"
+    example: test_tc001_durer_valid
+  integration:
+    orchestrator: tests/integration/
+    unit_rules: tests/unit/entity/, tests/unit/control/
+  aaa_structure:
+    arrange: Given 격자·Profile·기대값 준비
+    act: When 판정 함수 호출
+    assert: Then verdict·violations·lineId 검증
+  align_with_spec:
+    document: Report/02.MagicSquare_TDD_Design_Report.md
+    tc_range: TC-001 ~ TC-018
+
+################################################################################
+forbidden:
+  - pattern: "print("
+    reason: 디버깅 출력은 테스트·로깅 정책을 깨고 I-7 명시적 실패 추적을 방해한다.
+    alternative: "logging.getLogger(__name__)" 또는 pytest caplog
+  - pattern: "하드코딩된 마법상수·선 개수(예: if sum == 34만 scattered)"
+    reason: I-3·I-4 Profile 고정을 우회하고 변경 시 전역 수정이 필요하다.
+    alternative: Profile MS4X4_STD_V1·MagicLineRegistry·MAGIC_CONSTANT 상수 한곳
+  - pattern: "except:"
+    reason: 예외 종류·메시지를 삼켜 InputError/Invalid 구분(I-7)이 불가능하다.
+    alternative: "except SpecificError as e:" 후 명시적 Violation·InputError 변환
+  - pattern: "RED 없이 src/ 기능 추가"
+    reason: Dual-Track TDD·Report/02 Slice 순서 위반.
+    alternative: red에서 test: 커밋 후 green에서 feat:
+  - pattern: "@pytest.mark.skip / xfail / assertion 삭제·완화"
+    reason: 테스트 약화로 거짓 green.
+    alternative: 명세(Report/02) 또는 구현 수정
+  - pattern: "Valid | 거의 맞음 | 부분 점수"
+    reason: I-7 위반; 1차는 Valid/Invalid/InputError만.
+    alternative: Invalid + I2_LINE_SUM_MISMATCH 등 구조화 violations
+  - pattern: "entity에서 open(), requests, click 등 I/O"
+    reason: ECB entity 순수성 위반.
+    alternative: boundary 레이어 어댑터
+  - pattern: "public def fn(...) -> None  # 타입 힌트 없음"
+    reason: code_style.type_hints 위반.
+    alternative: 모든 파라미터·반환값에 type hints
+
+################################################################################
+file_structure:
+  tree: |
+    MagicSquare_XX/
+    ├── src/
+    │   └── magicsquare/
+    │       ├── __init__.py
+    │       ├── entity/           # 도메인·규칙 (I-1, I-2, I-3)
+    │       │   ├── grid.py
+    │       │   ├── verdict.py
+    │       │   ├── violation.py
+    │       │   ├── magic_line.py
+    │       │   └── rules/        # multiset, line_sum 등
+    │       ├── control/          # 오케스트레이터 (I-4, I-5, I-7)
+    │       │   └── verify.py
+    │       └── boundary/         # 입출력 어댑터
+    │           ├── grid_parser.py
+    │           └── cli.py        # (2차) 표현
+    ├── tests/
+    │   ├── unit/
+    │   │   ├── entity/
+    │   │   └── control/
+    │   ├── integration/
+    │   └── conftest.py           # GOLDEN_* 픽스처
+    ├── Report/
+    ├── Prompting/
+    └── .cursor/
+        └── magicsquare-rules.yaml
+
+################################################################################
+ai_behavior:
+  before_code:
+    - Report/02 해당 Slice·TC-ID 확인; 관련 tests/ 파일 존재·내용 검토
+    - 현재 git 브랜치가 spec|red|green|refactor 중 무엇인지 확인
+    - red 브랜치면 테스트만, green이면 최소 구현만 계획
+  during_code:
+    - ECB 레이어 경계 위반 금지 (entity에 I/O·pytest 없음)
+    - 타입 힌트 없는 public 함수 생성 금지
+    - Google docstring을 public API에 추가
+    - 생성·검증·표현 혼합 금지; 1차는 검증만
+    - tdd_rules 위반 감지 시 응답 맨 앞에 "⚠ TDD_RULE_VIOLATION:" 로 경고 한 줄 출력
+  after_code:
+    - pytest 제안·실행(가능 시); Slice/전체 통과 여부 보고
+    - 변경이 tdd_rules 금지(리팩터 in green 등)에 해당하면 명시
+    - 커밋은 사용자 요청 시에만; 메시지는 commit_prefix 준수
+  on_spec_branch:
+    - Report/·Prompting/ 문서만; src/ 프로덕션 코드 작성 금지
+  references_first:
+    - 불확실하면 Report/02 TC·Decision Log 우선; 임의 Profile 변경 금지
