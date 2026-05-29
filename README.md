@@ -109,7 +109,9 @@ MagicSquare_XX/
 │   ├── setup-venv.ps1                 ← 가상환경 생성·의존성 설치
 │   ├── run-coverage.ps1               ← 테스트 + 커버리지 (터미널 + HTML)
 │   ├── open-coverage-html.ps1         ← htmlcov/index.html 브라우저에서 열기
-│   └── open-coverage-liveserver.ps1   ← Live Server로 htmlcov/ 서빙
+│   ├── open-coverage-liveserver.ps1   ← Live Server로 htmlcov/ 서빙
+│   ├── green_validation_gui.py        ← 4×4 Answer/Verify GUI 데모 (scripts only)
+│   └── demo_solver.py                 ← GUI용 2-blank 솔버·verify (scripts only)
 ├── src/magicsquare/                   ← ECB 구현 (boundary / control / domain / entity)
 ├── tests/                             ← pytest (unit / integration)
 ├── docs/                              ← 테스트 플랜 등 (예: TP-ST01-TC011-001.md)
@@ -129,7 +131,8 @@ MagicSquare_XX/
 │   ├── 10.MagicSquare_RED_DualTrack_Skeleton_Report.md ← RED Skeleton (24건)
 │   ├── 11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md ← GREEN 1슬라이스 (grid=None)
 │   ├── 12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md ← RED/GREEN To-Do SSOT
-│   └── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
+│   ├── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
+│   └── 14.MagicSquare_GREEN_GUI_Demo_Report.md ← GREEN GUI 데모 (Answer/Verify)
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
@@ -138,7 +141,8 @@ MagicSquare_XX/
     ├── 06.cursor_dual_track_red_fr01_05_transcript.md ← Dual-Track RED FR-01~05 대화
     ├── 07.cursor_dual_track_red_skeleton_transcript.md ← RED Skeleton·Export 대화
     ├── 08.cursor_stabilize_green_ac_fr_01_01_transcript.md ← stabilize/green·Report/11 Export
-    └── 09.cursor_red_green_todo_export_transcript.md ← RED/GREEN To-Do·Report/12 Export
+    ├── 09.cursor_red_green_todo_export_transcript.md ← RED/GREEN To-Do·Report/12 Export
+    └── 10.cursor_green_gui_demo_transcript.md ← GREEN GUI·Report/14 Export
 ```
 
 ---
@@ -160,6 +164,7 @@ MagicSquare_XX/
 | [Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md) | GREEN 1슬라이스 (`stabilize/green`, grid=None 6 passed) |
 | [Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md](Report/12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md) | RED/GREEN To-Do 체크리스트 SSOT |
 | [Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md) | GREEN `feat:` 커밋별 6항목 산출물 (G-01~G-04) |
+| [Report/14.MagicSquare_GREEN_GUI_Demo_Report.md](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) | GREEN GUI 데모 (4×4 Answer/Verify, `scripts/`) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
@@ -169,6 +174,7 @@ MagicSquare_XX/
 | [Prompting/07.cursor_dual_track_red_skeleton_transcript.md](Prompting/07.cursor_dual_track_red_skeleton_transcript.md) | RED Skeleton·Report Export 대화 transcript |
 | [Prompting/08.cursor_stabilize_green_ac_fr_01_01_transcript.md](Prompting/08.cursor_stabilize_green_ac_fr_01_01_transcript.md) | stabilize/green ECB GREEN·Report/11 Export transcript |
 | [Prompting/09.cursor_red_green_todo_export_transcript.md](Prompting/09.cursor_red_green_todo_export_transcript.md) | RED/GREEN To-Do·Report/12 Export transcript |
+| [Prompting/10.cursor_green_gui_demo_transcript.md](Prompting/10.cursor_green_gui_demo_transcript.md) | GREEN GUI·Report/14 Export transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
@@ -181,9 +187,9 @@ MagicSquare_XX/
 | TDD 설계 문서 (`spec`) | ✅ `Report/02...` |
 | PRD (`spec`) | ✅ `Report/03...` |
 | 보고서·Prompting transcript | ✅ `Report/`, `Prompting/` |
-| 구현·테스트·실행 방법 | ⏳ GREEN 1슬라이스 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), 브랜치 `stabilize/green` |
+| 구현·테스트·실행 방법 | ✅ AC-FR-01-01 GREEN 12/12 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), GUI [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) |
 | RED 보고서·Transcript | ✅ `Report/06~10`, `Prompting/05~07` |
-| GREEN 보고서·Transcript | ✅ `Report/11`, `Prompting/08` |
+| GREEN 보고서·Transcript | ✅ `Report/11~14`, `Prompting/08~10` |
 
 ---
 
@@ -276,6 +282,15 @@ MagicSquare_XX/htmlcov/index.html   ← 파일별·라인별 커버리지 (녹�
 
 - **시스템 `python` / 전역 `pytest`로 실행하지 마세요.** 패키지 버전·`src` 경로가 어긋날 수 있습니다.
 - 의존성을 바꾼 뒤에는 `.venv`에서 `pip install -r requirements-dev.txt`를 다시 실행하세요.
+
+### 7. GREEN GUI 데모 (수동)
+
+```powershell
+$env:PYTHONPATH="src;scripts"
+python scripts\green_validation_gui.py
+```
+
+격자 입력 → **답안** (미검증) → **Verify** (PASS/FAIL). 상세: [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md).
 
 ---
 
