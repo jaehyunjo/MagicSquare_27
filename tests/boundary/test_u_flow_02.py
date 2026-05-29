@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import pytest
 
+pytestmark = pytest.mark.dual_track_red
+
 # from unittest.mock import MagicMock
 # from boundary.ui_boundary import UIBoundary
 # from control.solve_partial import SolvePartialMagicSquare

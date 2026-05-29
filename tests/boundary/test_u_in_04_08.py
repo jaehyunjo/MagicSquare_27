@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import pytest
 
+pytestmark = pytest.mark.dual_track_red
+
 # from boundary.input_validator import InputValidator
 
 

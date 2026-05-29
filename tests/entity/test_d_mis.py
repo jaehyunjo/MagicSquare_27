@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import pytest
 
+pytestmark = pytest.mark.dual_track_red
+
 # from entity.missing import find_not_exist_nums
 
 
