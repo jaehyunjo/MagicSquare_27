@@ -42,6 +42,21 @@ def validate_grid_input(grid: Any | None) -> ValidationFailure:
             code=_INVALID_SIZE_CODE,
             message=_INVALID_SIZE_MESSAGE,
         )
+    if isinstance(grid, list):
+        if len(grid) != 4:
+            return ValidationFailure(
+                code=_INVALID_SIZE_CODE,
+                message=_INVALID_SIZE_MESSAGE,
+            )
+        for row in grid:
+            if not isinstance(row, list) or len(row) != 4:
+                return ValidationFailure(
+                    code=_INVALID_SIZE_CODE,
+                    message=_INVALID_SIZE_MESSAGE,
+                )
+        raise NotImplementedError(
+            "GREEN partial: valid 4x4 shape not implemented (AC-FR-01-01)"
+        )
     raise NotImplementedError(
         "GREEN partial: only grid=None and [] implemented (AC-FR-01-01)"
     )
