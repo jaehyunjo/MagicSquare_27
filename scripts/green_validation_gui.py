@@ -24,7 +24,10 @@ from demo_solver import (  # noqa: E402
     grid_key,
     verify_grid,
 )
-from magicsquare.boundary.validation import ValidationFailure, validate_grid_input  # noqa: E402
+from magicsquare.boundary.validation import (  # noqa: E402
+    ValidationFailure,
+    dimension_validation_failure,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -140,10 +143,8 @@ class MagicSquareGui(tk.Tk):
         self._set_result("")
 
     def _boundary_size_ok(self, grid: list[list[int]]) -> str | None:
-        try:
-            result = validate_grid_input(grid)
-        except NotImplementedError:
-            return None
+        """Demo-only dimension check (does not call full validate / domain resolve)."""
+        result = dimension_validation_failure(grid)
         if isinstance(result, ValidationFailure):
             return result.message
         return None

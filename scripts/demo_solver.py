@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-MAGIC_CONSTANT = 34
+from magicsquare.entity.profile import MAGIC_CONSTANT
 
 G0_DURER: list[list[int]] = [
     [16, 3, 2, 13],

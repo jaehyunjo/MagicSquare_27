@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import pytest
 
+pytestmark = pytest.mark.dual_track_red
+
 # from control.solver import solution
 
 

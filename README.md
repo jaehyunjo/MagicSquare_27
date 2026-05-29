@@ -103,7 +103,7 @@ MagicSquare_XX/
 ├── README.md                          ← 이 파일 (프로젝트 개요)
 ├── .venv/                             ← 로컬 가상환경 (git 제외, 테스트는 여기서 실행)
 ├── requirements-dev.txt               ← pytest, pydantic, pytest-cov
-├── pytest.ini                         ← pythonpath=src
+├── pytest.ini                         ← pythonpath=src; 기본 -m "not dual_track_red"
 ├── .coveragerc                        ← 커버리지 측정 설정
 ├── scripts/
 │   ├── setup-venv.ps1                 ← 가상환경 생성·의존성 설치
@@ -133,7 +133,11 @@ MagicSquare_XX/
 │   ├── 12.MagicSquare_RED_GREEN_Todo_Checklist_Report.md ← RED/GREEN To-Do SSOT
 │   ├── 13.MagicSquare_GREEN_Commit_Artifacts_Report.md ← GREEN 커밋별 6항목 산출물
 │   ├── 14.MagicSquare_GREEN_GUI_Demo_Report.md ← GREEN GUI 데모 (Answer/Verify)
-│   └── 15.MagicSquare_Golden_Master_Report.md ← Golden Master 회귀 (GM-1~3)
+│   ├── 15.MagicSquare_Golden_Master_Report.md ← Golden Master 회귀 (GM-1~3)
+│   ├── 16.MagicSquare_REFACTOR_Plan_Report.md ← REFACTOR 계획 (S0 · AC-FR)
+│   ├── 17.MagicSquare_REFACTOR_Execution_Report.md ← REFACTOR 실행 (WP×7 commits)
+│   ├── 18.MagicSquare_Session_Summary_Report.md ← Session Summary Export (RPT-MS-018)
+│   └── 19.MagicSquare_ECB_Pytest_Gate_Report.md ← ECB pytest gate (24 deselected)
 └── Prompting/
     ├── 01.cursor_4x4_magic_square_problem_definit_prompt.md   ← 문제 정의 대화·프롬프트
     ├── 02.cursor_4x4_magic_square_tdd_spec_workflow_prompt.md ← TDD·브랜치·spec 대화
@@ -144,7 +148,11 @@ MagicSquare_XX/
     ├── 08.cursor_stabilize_green_ac_fr_01_01_transcript.md ← stabilize/green·Report/11 Export
     ├── 09.cursor_red_green_todo_export_transcript.md ← RED/GREEN To-Do·Report/12 Export
     ├── 10.cursor_green_gui_demo_transcript.md ← GREEN GUI·Report/14 Export
-    └── 11.cursor_golden_master_transcript.md ← Golden Master·Report/15 Export
+    ├── 11.cursor_golden_master_transcript.md ← Golden Master·Report/15 Export
+    ├── 12.cursor_refactor_plan_export_transcript.md ← REFACTOR 계획·Report/16 Export
+    ├── 13.cursor_refactor_execution_export_transcript.md ← REFACTOR 실행·Report/17 Export
+    ├── 18.MagicSquare_Session_Summary_Prompt_Transcript.md ← Session Summary·Report/18 Export
+    └── 19.MagicSquare_ECB_Pytest_Gate_Prompt_Transcript.md ← ECB pytest gate·Report/19 Export
 ```
 
 ---
@@ -168,6 +176,10 @@ MagicSquare_XX/
 | [Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md](Report/13.MagicSquare_GREEN_Commit_Artifacts_Report.md) | GREEN `feat:` 커밋별 6항목 산출물 (G-01~G-04) |
 | [Report/14.MagicSquare_GREEN_GUI_Demo_Report.md](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md) | GREEN GUI 데모 (4×4 Answer/Verify, `scripts/`) |
 | [Report/15.MagicSquare_Golden_Master_Report.md](Report/15.MagicSquare_Golden_Master_Report.md) | Golden Master 회귀 (GM-1~3, approve, GM-TC-01~05) |
+| [Report/16.MagicSquare_REFACTOR_Plan_Report.md](Report/16.MagicSquare_REFACTOR_Plan_Report.md) | REFACTOR 계획 SSOT (S0 · AC-FR-01-01, P0~P3, Phase A~C) |
+| [Report/17.MagicSquare_REFACTOR_Execution_Report.md](Report/17.MagicSquare_REFACTOR_Execution_Report.md) | REFACTOR 실행 (WP×7 `refactor:` 커밋, pytest 13/35 passed) |
+| [Report/18.MagicSquare_Session_Summary_Report.md](Report/18.MagicSquare_Session_Summary_Report.md) | Session Summary Export (RPT-MS-018, Step 0 실측·커버리지) |
+| [Report/19.MagicSquare_ECB_Pytest_Gate_Report.md](Report/19.MagicSquare_ECB_Pytest_Gate_Report.md) | ECB pytest gate — `dual_track_red` 기본 제외 (RPT-MS-019) |
 | [docs/TP-ST01-TC011-001.md](docs/TP-ST01-TC011-001.md) | 테스트 플랜 (AC-FR-01-01 / TC-011) |
 | [defect_list.md](defect_list.md) | RED 결함 목록 (DEF-001~005) |
 | [Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md](Prompting/01.cursor_4x4_magic_square_problem_definit_prompt.md) | 문제 정의(STEP 1~5) 프롬프트·응답 transcript |
@@ -179,6 +191,10 @@ MagicSquare_XX/
 | [Prompting/09.cursor_red_green_todo_export_transcript.md](Prompting/09.cursor_red_green_todo_export_transcript.md) | RED/GREEN To-Do·Report/12 Export transcript |
 | [Prompting/10.cursor_green_gui_demo_transcript.md](Prompting/10.cursor_green_gui_demo_transcript.md) | GREEN GUI·Report/14 Export transcript |
 | [Prompting/11.cursor_golden_master_transcript.md](Prompting/11.cursor_golden_master_transcript.md) | Golden Master·Report/15 Export transcript |
+| [Prompting/12.cursor_refactor_plan_export_transcript.md](Prompting/12.cursor_refactor_plan_export_transcript.md) | 코드 리뷰·REFACTOR 계획·Report/16 Export transcript |
+| [Prompting/13.cursor_refactor_execution_export_transcript.md](Prompting/13.cursor_refactor_execution_export_transcript.md) | REFACTOR 실행·7커밋·Report/17 Export transcript |
+| [Prompting/18.MagicSquare_Session_Summary_Prompt_Transcript.md](Prompting/18.MagicSquare_Session_Summary_Prompt_Transcript.md) | Session Summary·Report/18 Export transcript (RPT-MS-018) |
+| [Prompting/19.MagicSquare_ECB_Pytest_Gate_Prompt_Transcript.md](Prompting/19.MagicSquare_ECB_Pytest_Gate_Prompt_Transcript.md) | ECB pytest gate·Report/19 Export transcript |
 | `.cursor/magicsquare-rules.yaml` | 프로젝트 규칙 템플릿 (8개 최상위 키) |
 
 ---
@@ -194,6 +210,7 @@ MagicSquare_XX/
 | 구현·테스트·실행 방법 | ✅ AC-FR-01-01 GREEN 12/12 — [Report/11](Report/11.MagicSquare_GREEN_Stabilize_AC_FR_01_01_Report.md), GUI [Report/14](Report/14.MagicSquare_GREEN_GUI_Demo_Report.md), GM [Report/15](Report/15.MagicSquare_Golden_Master_Report.md) |
 | RED 보고서·Transcript | ✅ `Report/06~10`, `Prompting/05~07` |
 | GREEN 보고서·Transcript | ✅ `Report/11~15`, `Prompting/08~11` |
+| REFACTOR 계획·실행·Summary | ✅ [Report/16~19](Report/16.MagicSquare_REFACTOR_Plan_Report.md), [Prompting/12~13,18~19](Prompting/12.cursor_refactor_plan_export_transcript.md) · `refactor/refactor` 9 commits |
 
 ---
 
@@ -221,6 +238,17 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-venv.ps1
 프롬프트에 `(.venv)`가 보이면 활성화된 상태입니다.
 
 ### 3. 테스트만 실행
+
+기본 `pytest`는 **ECB 게이트**만 수집한다 (`pytest.ini` → `-m "not dual_track_red"`).  
+Dual-Track Skeleton 24건은 `pytest.fail` RED 자리표시이므로 **기본 실행에서 제외**된다.
+
+```powershell
+pytest -q
+# → 35 passed, 24 deselected (AC-FR + unit + golden_master)
+
+pytest -m dual_track_red -q
+# → 24 failed (의도적 Skeleton RED — Full RED→GREEN 전까지 정상)
+```
 
 ```powershell
 pytest tests/unit/boundary/test_ac_fr_01_01_invalid_size.py -v

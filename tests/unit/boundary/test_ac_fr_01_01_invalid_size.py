@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Any
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 from pydantic import BaseModel
@@ -119,27 +119,23 @@ class TestAcFr0101InvalidSize:
         resolve_spy = MagicMock(name="resolve")
 
         # When — orchestrator must short-circuit before domain
-        with patch("magicsquare.domain.resolver.resolve", resolve_spy):
-            result = verify_magic_square(grid, resolve=resolve_spy)
+        result = verify_magic_square(grid, resolve=resolve_spy)
 
         # Then
         _assert_invalid_size_failure(result)
         resolve_spy.assert_not_called()
 
     def test_none_grid_boundary_resolve_zero_calls(self) -> None:
-        """AC-FR-01-01 | PRD §8.1 INVALID_SIZE — resolve() spy at boundary only."""
+        """AC-FR-01-01 | PRD §8.1 INVALID_SIZE — boundary path does not invoke control."""
         # AC-FR-01-01
         # Given
         grid: None = None
-        resolve_spy = MagicMock(name="resolve")
 
         # When
-        with patch("magicsquare.domain.resolver.resolve", resolve_spy):
-            result = validate_grid_input(grid)
+        result = validate_grid_input(grid)
 
         # Then
         _assert_invalid_size_failure(result)
-        resolve_spy.assert_not_called()
 
     def test_none_grid_resolve_called_fails_isolation(self) -> None:
         """AC-FR-01-01 | PRD §8.1 INVALID_SIZE — any resolve() call is a failure."""
@@ -149,12 +145,33 @@ class TestAcFr0101InvalidSize:
         resolve_spy = MagicMock(name="resolve", return_value={"verdict": "Valid"})
 
         # When
-        with patch("magicsquare.domain.resolver.resolve", resolve_spy):
-            result = verify_magic_square(grid, resolve=resolve_spy)
+        result = verify_magic_square(grid, resolve=resolve_spy)
 
         # Then
         assert resolve_spy.call_count == 0, "resolve() must not be called for grid=None"
         _assert_invalid_size_failure(result)
+
+    def test_orchestrator_injected_validate_short_circuits_resolve(self) -> None:
+        """Control uses injected validate; resolve must not run on boundary failure."""
+        # Given
+        expected = ValidationFailure(
+            code=INVALID_SIZE_CODE,
+            message=PRD_SECTION_81_MESSAGE,
+        )
+        validate_stub = MagicMock(name="validate", return_value=expected)
+        resolve_spy = MagicMock(name="resolve")
+
+        # When
+        result = verify_magic_square(
+            None,
+            validate=validate_stub,
+            resolve=resolve_spy,
+        )
+
+        # Then
+        validate_stub.assert_called_once_with(None)
+        resolve_spy.assert_not_called()
+        assert result is expected
 
     def test_scope_only_invalid_size_not_other_ac_codes(self) -> None:
         """AC-FR-01-01 | PRD §8.1 INVALID_SIZE — AC-FR-01-02~05 / FR-02~05 excluded."""

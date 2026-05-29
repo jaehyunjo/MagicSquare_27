@@ -1,10 +1,14 @@
-"""Grid input validation (Boundary). RED stub — green phase implements AC-FR-01-01."""
+"""Grid input validation (Boundary)."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict
+
+from magicsquare.entity.contracts import INVALID_SIZE
+
+_INVALID_SIZE_MESSAGE = "Grid must be 4x4."
 
 
 class ValidationFailure(BaseModel):
@@ -16,8 +20,29 @@ class ValidationFailure(BaseModel):
     message: str
 
 
-_INVALID_SIZE_CODE = "INVALID_SIZE"
-_INVALID_SIZE_MESSAGE = "Grid must be 4x4."
+def _invalid_size_failure() -> ValidationFailure:
+    return ValidationFailure(code=INVALID_SIZE, message=_INVALID_SIZE_MESSAGE)
+
+
+def dimension_validation_failure(grid: Any | None) -> ValidationFailure | None:
+    """Return INVALID_SIZE when dimension is invalid; None when list is 4×4 shaped.
+
+    Args:
+        grid: Raw grid (None or nested lists).
+
+    Returns:
+        ValidationFailure for null/empty/wrong shape; None if rows and cols are 4×4.
+    """
+    if grid is None:
+        return _invalid_size_failure()
+    if not isinstance(grid, list):
+        return None
+    if len(grid) == 0 or len(grid) != 4:
+        return _invalid_size_failure()
+    for row in grid:
+        if not isinstance(row, list) or len(row) != 4:
+            return _invalid_size_failure()
+    return None
 
 
 def validate_grid_input(grid: Any | None) -> ValidationFailure:
@@ -32,31 +57,15 @@ def validate_grid_input(grid: Any | None) -> ValidationFailure:
     Raises:
         NotImplementedError: For inputs outside the current green slice.
     """
-    if grid is None:
-        return ValidationFailure(
-            code=_INVALID_SIZE_CODE,
-            message=_INVALID_SIZE_MESSAGE,
-        )
-    if isinstance(grid, list) and len(grid) == 0:
-        return ValidationFailure(
-            code=_INVALID_SIZE_CODE,
-            message=_INVALID_SIZE_MESSAGE,
-        )
-    if isinstance(grid, list):
-        if len(grid) != 4:
-            return ValidationFailure(
-                code=_INVALID_SIZE_CODE,
-                message=_INVALID_SIZE_MESSAGE,
-            )
-        for row in grid:
-            if not isinstance(row, list) or len(row) != 4:
-                return ValidationFailure(
-                    code=_INVALID_SIZE_CODE,
-                    message=_INVALID_SIZE_MESSAGE,
-                )
+    if grid is not None and not isinstance(grid, list):
         raise NotImplementedError(
-            "GREEN partial: valid 4x4 shape not implemented (AC-FR-01-01)"
+            "GREEN partial: only grid=None and [] implemented (AC-FR-01-01)"
         )
+
+    failure = dimension_validation_failure(grid)
+    if failure is not None:
+        return failure
+
     raise NotImplementedError(
-        "GREEN partial: only grid=None and [] implemented (AC-FR-01-01)"
+        "GREEN partial: valid 4x4 shape not implemented (AC-FR-01-01)"
     )

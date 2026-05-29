@@ -1,14 +1,7 @@
-"""Domain resolve entry point. RED stub — must not run for grid=None (AC-FR-01-01)."""
+"""Compatibility shim — use magicsquare.entity.resolver."""
 
 from __future__ import annotations
 
-from typing import Any
+from magicsquare.entity.resolver import resolve
 
-
-def resolve(grid: Any) -> Any:
-    """Apply domain magic-square logic to a canonical grid.
-
-    Raises:
-        NotImplementedError: RED phase — no production logic yet.
-    """
-    raise NotImplementedError("RED: resolve not implemented (green phase)")
+__all__ = ["resolve"]
